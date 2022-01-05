@@ -293,7 +293,8 @@ class admin_form(object):
             self.text = self.text[0:len(self.text)-1]
             
         self.textEdit.setText(self.text)
-        imgloc = ".\\data\\"+self.user+"\\"+self.user+".jpg"
+        imgloc = os.path.join('.','data', self.user, self.user +".jpg")
+        #imgloc = ".\\data\\"+self.user+"\\"+self.user+".jpg"
         img = cv2.imread(imgloc)
         img = cv2.resize(img,(365,350))
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)

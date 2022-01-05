@@ -48,10 +48,10 @@ class Ui_MainWindow(object):
         self.check.clicked.connect(self.CheckFace)
 
 
-        #Cancelbutton Widget
-        self.cancel = QtWidgets.QPushButton(self.splitter)
-        self.cancel.setObjectName("cancel")
-        self.cancel.clicked.connect(self.CancelFeed)
+        #cartoonbutton Widget
+        self.cartoon = QtWidgets.QPushButton(self.splitter)
+        self.cartoon.setObjectName("cartoon")
+        self.cartoon.clicked.connect(self.cartoonFeed)
 
 
 
@@ -88,26 +88,18 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Auth"))
         self.check.setText(_translate("MainWindow", "Check"))
-        self.cancel.setText(_translate("MainWindow", "Cancel"))
+        self.cartoon.setText(_translate("MainWindow", "cartoon"))
         self.label.setText(_translate("MainWindow", "Image Frames"))
 
     
     
     def ImageUpdateSlot(self, Image):
-        if self.Ifchecked :
-            Image = cartoonization(Image)
-
-
         self.frame = Image
-        ConvertToQtFormat = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
-        Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-
-
-        self.label.setPixmap(QPixmap.fromImage(Pic))
 
     def CheckFace(self):   #This function will check for the user and if authenticated will get his name and pass it to the page
         self.Ifchecked = not self.Ifchecked
-        self.admin_page('yahia')
+        if self.Ifchecked:
+
 
 
     def admin_page(self,name):
@@ -118,8 +110,10 @@ class Ui_MainWindow(object):
         self.Form.show()
 
 
-    def CancelFeed(self):
-        self.Worker1.stop()
+    def cartoonFeed(self):
+        ConvertToQtFormat = QImage(self.frame.data, self.frame.shape[1], self.frame.shape[0], QImage.Format_RGB888)
+        Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+        self.label.setPixmap(QPixmap.fromImage(Pic))
     
 
 

@@ -25,6 +25,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
+import detector.py
+
+
 
 from datetime import datetime
 import csv
