@@ -24,21 +24,19 @@ import re
 class admin_form(object):
     def setupUi(self, Form , name):
         Form.setObjectName("Form")
-        Form.resize(635, 331)
+        Form.resize(711, 435)
         self.mw = Form #mw is short for Main Window 
 
         self.user = name
 
-        self.gridLayout_2 = QtWidgets.QGridLayout(Form)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-
+        self.gridLayout_3 = QtWidgets.QGridLayout(Form)
+        self.gridLayout_3.setObjectName("gridLayout_3")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
 
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setObjectName("textEdit")
         self.verticalLayout.addWidget(self.textEdit)
-
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
 
@@ -139,36 +137,30 @@ class admin_form(object):
         self.gridLayout.addWidget(self.num6, 3, 2, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.gridLayout_3.addLayout(self.verticalLayout, 0, 0, 3, 1)
 
         self.frame = QtWidgets.QLabel(Form)
         self.frame.setObjectName("frame")
-        self.verticalLayout_2.addWidget(self.frame)
-        self.avatar = cv2.imread('yahia-cartoon.jpg')
-        ConvertToQtFormat = QImage(self.avatar.data, self.avatar.shape[1], self.avatar.shape[0], QImage.Format_RGB888)
-        self.pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-        self.frame.setPixmap(QPixmap.fromImage(self.pic))
-        
+        self.gridLayout_3.addWidget(self.frame, 0, 1, 1, 2)
+        pic = cv2.imread('yahia-cartoon.jpg')
+        pic = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
+        pic = pic.scaled(640, 480, Qt.KeepAspectRatio)
+        self.frame.setPixmap(QPixmap.fromImage(pic))
+
+
+
 
         self.add_user = QtWidgets.QPushButton(Form)
         self.add_user.setObjectName("add_user")
-        self.verticalLayout_2.addWidget(self.add_user)
-
-        self.del_user = QtWidgets.QPushButton(Form)
-        self.del_user.setObjectName("del_user")
-        self.verticalLayout_2.addWidget(self.del_user)
-
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.gridLayout_3.addWidget(self.add_user, 1, 1, 1, 1)
 
         self.usersList = QtWidgets.QListWidget(Form)
         self.usersList.setObjectName("usersList")
-        self.horizontalLayout.addWidget(self.usersList)
+        self.gridLayout_3.addWidget(self.usersList, 1, 2, 2, 1)
 
-        self.gridLayout_2.addLayout(self.horizontalLayout, 0, 1, 1, 1)
+        self.del_user = QtWidgets.QPushButton(Form)
+        self.del_user.setObjectName("del_user")
+        self.gridLayout_3.addWidget(self.del_user, 2, 1, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

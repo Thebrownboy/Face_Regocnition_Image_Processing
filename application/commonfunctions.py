@@ -18,6 +18,12 @@ from skimage.util import random_noise
 from skimage.filters import median
 from skimage.feature import canny
 import os
+from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+import cv2
 
 
 from datetime import datetime
