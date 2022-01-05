@@ -17,7 +17,7 @@
    <item row="0" column="0" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextEdit" name="text"/>
+      <widget class="QTextEdit" name="textEdit"/>
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">

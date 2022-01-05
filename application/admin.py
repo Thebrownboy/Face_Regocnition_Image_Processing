@@ -142,10 +142,6 @@ class admin_form(object):
         self.frame = QtWidgets.QLabel(Form)
         self.frame.setObjectName("frame")
         self.gridLayout_3.addWidget(self.frame, 0, 1, 1, 2)
-        pic = cv2.imread('yahia-cartoon.jpg')
-        pic = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
-        pic = pic.scaled(640, 480, Qt.KeepAspectRatio)
-        self.frame.setPixmap(QPixmap.fromImage(pic))
 
 
 
@@ -297,6 +293,16 @@ class admin_form(object):
             self.text = self.text[0:len(self.text)-1]
             
         self.textEdit.setText(self.text)
+        imgloc = ".\\data\\"+self.user+"\\"+self.user+".jpg"
+        img = cv2.imread(imgloc)
+        img = cv2.resize(img,(365,350))
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        height, width, channel = img.shape
+        bytesPerLine = 3 * width
+        qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
+        self.frame.setPixmap(QPixmap.fromImage(qImg))
+
+
 
 
 
