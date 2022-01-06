@@ -15,11 +15,16 @@ from admin import *
 
 
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-
+        self.auth = False
+        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_frontalface_alt2.xml')
         # Flag to start conversion
         self.Ifchecked = False
+
+        #Flag to start cartoonization
+        self.ifCartoon = False
 
         #The frame we have now
         self.frame = []
@@ -76,7 +81,9 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
+        ##
+        self.clf = ViolaJones.load('model')
+        self.faces = []
 
         #Worker Pthread to update image and not stuck the application
         self.Worker1 = Worker1()
@@ -95,10 +102,37 @@ class Ui_MainWindow(object):
     
     def ImageUpdateSlot(self, Image):
         self.frame = Image
+        if self.ifCartoon:
+            Image = cartoonization(Image)
+        else:
+            self.faces = get_faces(self.frame, self.clf)
+            for i, j, x, y in self.faces:
+                cv2.rectangle(self.frame, (j,i), (y, x), (255, 0, 0))
+
+        ConvertToQtFormat = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
+        Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+        self.label.setPixmap(QPixmap.fromImage(Pic))
+
+
 
     def CheckFace(self):   #This function will check for the user and if authenticated will get his name and pass it to the page
-        self.Ifchecked = not self.Ifchecked
-        if self.Ifchecked:
+        #self.Ifchecked = not self.Ifchecked
+
+
+        if len(self.faces) != 0:
+            #gray=cv2.cvtColor(self.frame,cv2.COLOR_RGB2GRAY)
+            # Detect faces
+            #faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
+            # Draw rectangle around the faces and crop the faces
+
+            for (i, j, x, y) in self.faces:
+                face = self.frame[j:y, i:x]
+                print( check_img(face))
+                self.auth = True        
+                self.admin_page("osama")
+                # self.Worker1.stop()
+
+
 
 
 
@@ -110,10 +144,9 @@ class Ui_MainWindow(object):
         self.Form.show()
 
 
+
     def cartoonFeed(self):
-        ConvertToQtFormat = QImage(self.frame.data, self.frame.shape[1], self.frame.shape[0], QImage.Format_RGB888)
-        Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-        self.label.setPixmap(QPixmap.fromImage(Pic))
+        self.ifCartoon = not self.ifCartoon
     
 
 

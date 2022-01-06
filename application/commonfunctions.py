@@ -24,8 +24,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
+from ViolaJones import *
 
-import detector.py
+from detector import *
 
 
 

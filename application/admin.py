@@ -149,6 +149,7 @@ class admin_form(object):
         self.add_user = QtWidgets.QPushButton(Form)
         self.add_user.setObjectName("add_user")
         self.gridLayout_3.addWidget(self.add_user, 1, 1, 1, 1)
+        self.add_user.clicked.connect(self.signup)
 
         self.usersList = QtWidgets.QListWidget(Form)
         self.usersList.setObjectName("usersList")
@@ -240,6 +241,8 @@ class admin_form(object):
         self.processed = True
 			
 		
+    def signup(self):
+        detector("osama")
 		
     def show(self):
         self.textEdit.setFontPointSize(24)
@@ -293,7 +296,7 @@ class admin_form(object):
             self.text = self.text[0:len(self.text)-1]
             
         self.textEdit.setText(self.text)
-        imgloc = os.path.join('.','data', self.user, self.user +".jpg")
+        imgloc = os.path.join('data', self.user, self.user +'.jpg')
         #imgloc = ".\\data\\"+self.user+"\\"+self.user+".jpg"
         img = cv2.imread(imgloc)
         img = cv2.resize(img,(365,350))

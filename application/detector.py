@@ -4,7 +4,9 @@ from numpy.linalg import eig,svd
 import math 
 import os
 from sklearn.decomposition import PCA
-import pickle ; 
+import pickle ;     
+import numpy as np
+import cv2
 
 
 def show_images(images,titles=None):
@@ -33,13 +35,15 @@ def show_images(images,titles=None):
 #loading the images resize them , then reshaping them into 1d vector .
 
 def reading_imgs(img_list):
-    for i in range(0,11):
-#         img =rgb2gray(np.asarray(Image.open("Abdalla"+str(i)+".jpeg").resize((500,500))));
-        img =rgb2gray(np.asarray(Image.open("Abdalla"+str(i)+".jpeg").resize((500,500))));
+    for j in range(1,4):
+        for i in range(0,11):
+    #         img =rgb2gray(np.asarray(Image.open("Abdalla"+str(i)+".jpeg").resize((500,500))));
+            imgloc = os.path.join('.','data', 'u'+str(j), 'Abdalla'+str(i) + '.jpeg' )
+            img =rgb2gray(np.asarray(Image.open(imgloc).resize((500,500))));
 
-        #         show_images([img],"face"+str(i)+".jpg")
-        img = img.reshape(img.shape[0]*img.shape[1],1)
-        img_list.append(img); 
+            #         show_images([img],"face"+str(i)+".jpg")
+            img = img.reshape(img.shape[0]*img.shape[1],1)
+            img_list.append(img); 
 
     return 
 
@@ -58,7 +62,8 @@ def get_mean_face(user_name, img_list):
     
     mean=summation/len(img_list); 
 
-    with open(user_name+"/meanFace.pkl","wb") as f : 
+    imgloc = os.path.join('.','data', user_name , 'meanFace.pkl' )
+    with open(imgloc,"wb") as f : 
         pickle.dump(mean,f)
     
     
@@ -97,9 +102,10 @@ def get_eigs(user_name,B,BT):
         norm = np.linalg.norm(Vi[:,[i]]); 
         Vi[:,[i]]=Vi[:,[i]]/norm
 
-    os.mkdir('./data/'+user_name)
-    os.chdir('./data/'+user_name)
-    with open("eigenfaces.pkl","wb") as f : 
+    # os.mkdir('./data/'+user_name)
+    # os.chdir('./data/'+user_name)
+    imgloc = os.path.join('.','data', user_name, 'eigenfaces.pkl' )
+    with open(imgloc,"wb") as f : 
         pickle.dump(Vi,f)
    
     return Vi,D; 
@@ -113,9 +119,13 @@ def get_weight(B,Vi,user_name):
 
 
 
-    os.mkdir('./data/'+user_name)
-    os.chdir('./data/'+user_name)
-    with open("weights.pkl","wb") as f : 
+    # os.mkdir('./data/'+user_name)
+    # os.chdir('./data/'+user_name)
+    print("saving the weights");
+    
+    imgloc = os.path.join('.','data', user_name, 'weights.pkl' )
+
+    with open(imgloc,"wb") as f : 
         pickle.dump(weights,f)
     return weights;
 
@@ -239,47 +249,62 @@ def get_PCA_threshold(pca_weights):
     
 ################################################################
 def check_img(img):
-    img =rgb2gray(np.asarray(img.resize((500,500))));
+    
+    imgloc = os.path.join('.','data', 'osama', 'meanFace.pkl' )
+
+    with open(imgloc,"rb") as f : 
+        mean_face=pickle.load(f)
+
+    imgloc = os.path.join('.','data', 'osama', 'weights.pkl' )
+
+    with open(imgloc,"rb") as f : 
+        weights= pickle.load(f)
+
+    imgloc = os.path.join('.','data', 'osama', 'eigenfaces.pkl' )
+
+    with open(imgloc,"rb") as f : 
+        Vi= pickle.load(f)
+
+
+
+    cv2.imwrite('temp.jpeg', img) 
+
+    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #img =rgb2gray(np.asarray(img.resize((500,500))));
+    print("i am here ")
+    img =rgb2gray(np.asarray(Image.open("temp.jpeg").resize((500,500))));
+    img = cv2.resize(img , (500,500))
+
     img = img.reshape(img.shape[0]*img.shape[1],1)
-    print("test image shape",img.shape)
+    
     imgNew= img - mean_face
     test_weight=get_test_weight(imgNew,Vi);
     euclidean_distance = np.linalg.norm(weights - test_weight, axis=0)
-    # print("min disance is ",min(euclidean_distance))
-    # print("threshold" ,0.28*get_threshold_again(weights))
-
-    if(min(euclidean_distance)< 0.28* get_threshold_again(weights)):
-        
-        # print(np.argmin(euclidean_distance))
-        # show_images([img_list[np.argmin(euclidean_distance)].reshape(500,500),img.reshape(500,500)],"Abdalla - mean ")
-        return True
-    else: 
-        return False ; 
+    return np.argmin(euclidean_distance); 
+    # if(min(euclidean_distance)< 0.5* get_threshold_again(weights)):
+    #     print(get_threshold_again(weights));
+    #     print(min(euclidean_distance))
+    #     return True
+    # else: 
+    #     print(get_threshold_again(weights));
+    #     print(min(euclidean_distance))
+    #     return False ; 
 
   
 
 
 
-################################################################
-# A,mean_face=reading_imgs_too()
-reading_imgs(img_list)
-mean_face,A=get_mean_face(img_list)
-#############################################3new
-
-
-
-
-######################################################
 
 
 def detector(user_name):
     img_list=[]; 
     reading_imgs(img_list)
-    mean_face,A=get_mean_face(img_list)
+    mean_face,A=get_mean_face(user_name,img_list)
     B,BT=sub_mean(A,mean_face);
 
     Vi,D=get_eigs(user_name,B,BT); 
     weights=get_weight(B,Vi,user_name);
+
 
 
 

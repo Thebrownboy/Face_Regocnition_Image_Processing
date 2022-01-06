@@ -1,0 +1,36 @@
+V1 
+stages: [5, 10]
+
+              precision    recall  f1-score   support
+
+           0       0.60      0.96      0.74      6161
+           1       0.98      0.75      0.85     15975
+
+    accuracy                           0.81     22136
+   macro avg       0.79      0.86      0.80     22136
+weighted avg       0.88      0.81      0.82     22136
+
+V2 
+stages: [5, 10, 20]
+{0: 1566, 1: 3038, 2: 3737}
+
+test_2
+precision    recall  f1-score   support
+
+           0       0.80      0.96      0.87      6661
+           1       0.98      0.90      0.94     16475
+
+    accuracy                           0.92     23136
+   macro avg       0.89      0.93      0.91     23136
+weighted avg       0.93      0.92      0.92     23136
+
+
+test_3
+precision    recall  f1-score   support
+
+           0       0.65      0.99      0.78      6661
+           1       1.00      0.78      0.88     16475
+
+    accuracy                           0.84     23136
+   macro avg       0.82      0.89      0.83     23136
+weighted avg       0.90      0.84      0.85     23136
